@@ -9,16 +9,25 @@
 # include <signal.h>
 
 # define ALLOWED_OPT "vh"
+# define USAGE \
+"Usage: \
+  	ping [options] <destination> \
+Options: \
+  <destination>      dns name or ip address \
+  -a                 use audible ping \
+  -v \
+  -h								"
 
 typedef struct 			s_ping
 {
 	pid_t				pid;
-	uid_t				uif;
-	struct	timeval		*tv;
-	struct	timezone	*tz;
-	struct	addrinfo	*res;
+	uid_t				uid;
+	struct	timeval		tv;
+	struct	timezone	tz;
+	struct	addinfo		*res;
 	struct	msghdr		*msg;
-	
+	int					sockfd;
+	char				ipv4_addr[sizeof(struct in_addr)];
 }						t_ping;
 
 #endif

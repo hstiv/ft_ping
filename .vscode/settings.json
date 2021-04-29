@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"ft_ping.h": "c",
+		"socket.h": "c",
+		"signal.h": "c",
+		"netdb.h": "c"
+	}
+}
