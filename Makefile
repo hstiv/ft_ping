@@ -1,6 +1,6 @@
 NAME			=	ft_ping
 
-SRC_NAME		=	main.c
+SRC_NAME		=	main.c get_host_ip.c
 
 SRC_PATH		=	srcs/
 

@@ -18,16 +18,42 @@ Options: \
   -v \
   -h								"
 
-typedef struct 			s_ping
+# define TEST \
+"-----------------------------------------\n\
+|	ai_flags        =	%d	|\n\
+|	ai_family       =	%d	|\n\
+|	ai_socktype     =	%d	|\n\
+|	ai_protocol     =	%d	|\n\
+|	ai_addrlen      =	%d	|\n\
+|	ai_canonname    =	%s	|\n\
+------------------------------------------\n\n"
+
+# define OPT_V 0
+# define OPT_H 1
+# define OPT_SIZE 2
+
+/*
+**			options[OPT_V] = [v]
+**			options[OPT_H] = [h]
+*/
+
+typedef struct 				s_ping
 {
-	pid_t				pid;
-	uid_t				uid;
-	struct	timeval		tv;
-	struct	timezone	tz;
-	struct	addinfo		*res;
-	struct	msghdr		*msg;
-	int					sockfd;
-	char				ipv4_addr[sizeof(struct in_addr)];
-}						t_ping;
+	int						options[3];
+	char					*hostname;
+	pid_t					pid;
+	uid_t					uid;
+	struct	timeval			tv;
+	struct	timezone		tz;
+	struct	addrinfo		*addr_res;
+	int						ai_family;
+	struct	msghdr			*msg;
+	int						sockfd;
+	char					ip_addr[INET_ADDRSTRLEN];
+	struct	sockaddr_in		ip4;
+	char					*reverse_dns;
+}							t_ping;
+
+int							get_host_ip(t_ping  *data);
 
 #endif
