@@ -43,18 +43,28 @@ Options: \n\
 **			options[OPT_H] = [h]
 */
 
-typedef	struct				s_pkt4 {
+typedef	struct				s_pkt4
+{
 	struct icmp				icmp;
 	time_t					timestamp;
 	char					data[PING_PACKET_DATA_SIZE];
 }							t_pkt4;
 
-typedef	struct				s_pkt6 {
+typedef	struct				s_pkt6
+{
 	struct icmp6_hdr		icmp;
 	time_t					timestamp;
-	char					data[PING_PKT_DATA_SIZE];
+	char					data[PING_PACKET_DATA_SIZE];
 }							t_pkt6;
 
+typedef struct				s_msg
+{
+	char					msg_buff[PING_PACKET_SIZE];
+	struct msghdr			message;
+	struct iovec			iov;
+	ssize_t					read_bytes;
+	struct icmp				*icmp4;
+}							t_msg;
 
 typedef	struct 				s_ping
 {
@@ -80,5 +90,6 @@ void						sigint_handler(int sig);
 void						loop(void);
 
 void						fill_pkt4(struct s_pkt4 *pkt, time_t timestamp);
+void						print_ping_header(void);
 
 #endif

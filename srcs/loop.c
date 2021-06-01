@@ -2,5 +2,6 @@
 
 void					loop(void)
 {
-
+	print_ping_header();
+	
 }

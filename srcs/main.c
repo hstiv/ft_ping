@@ -44,10 +44,10 @@ static int			parse_options(int argc, char **argv, t_ping *ping)
 
 static void			init_socket(t_ping *data)
 {
-	data->sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_ICMP);
+	data->sockfd = socket(data->ai_family, SOCK_STREAM, 0);
 	if (data->sockfd == -1)
 	{
-		dprintf(STDERR_FILENO, "ERROR: %s\n", "socket");
+		dprintf(STDERR_FILENO, "ERROR: %s (sockfd = %d)\n", "socket", data->sockfd);
 		exit (EXIT_FAILURE);
 	}
 }
@@ -62,7 +62,7 @@ static void			init_params(t_ping *data)
 		dprintf(STDERR_FILENO, "%s\n", "[gettimeofday]: One of [tv] or [tz] pointed outside the accessible address space.");
 		exit (EXIT_FAILURE);
 	}
-	if (get_host_ip(data) == EXIT_FAILURE || set_socket(data) == EXIT_FAILURE)
+	if (get_host_ip(data) == EXIT_FAILURE)
 		exit (EXIT_FAILURE);
 }
 
@@ -76,7 +76,8 @@ int					main(int argc, char	**argv)
 		exit (EXIT_FAILURE);
 	}
 	init_params(&data);
-	init_socket(&data)
+	init_socket(&data);
 	signal(SIGINT, &sigint_handler);
+	loop();
 	exit (EXIT_SUCCESS);
 }
