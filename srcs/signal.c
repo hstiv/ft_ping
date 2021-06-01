@@ -1,16 +1,10 @@
-#include<stdio.h>
-#include<signal.h>
-  
+#include "ft_ping.h"
+
 // Handler for SIGINT, caused by
 // Ctrl-C at keyboard
-void handle_sigint(int sig)
+void			sigint_handler(int sig)
 {
     printf("Caught signal %d\n", sig);
-}
-  
-int main()
-{
-    signal(SIGINT, handle_sigint);
-    while (1) ;
-    return 0;
+    // print_stat();
+    exit (EXIT_SUCCESS);
 }
