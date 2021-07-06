@@ -37,6 +37,9 @@ Options: \n\
 # define MAX_INET_ADDRSTRLEN (INET6_ADDRSTRLEN > INET_ADDRSTRLEN ? INET6_ADDRSTRLEN : INET_ADDRSTRLEN)
 # define PING_PACKET_SIZE	84
 # define PING_PACKET_DATA_SIZE	(PING_PACKET_SIZE - sizeof(struct icmp) - sizeof(time_t))
+# define ICMP_ECHO_CODE 0
+# define RECV_TIMEOUT 1
+# define TTL 64
 
 /*
 **			options[OPT_V] = [v]
@@ -45,17 +48,10 @@ Options: \n\
 
 typedef	struct				s_pkt4
 {
-	struct icmp				icmp;
+	struct icmphdr			hdr;
 	time_t					timestamp;
-	char					data[PING_PACKET_DATA_SIZE];
+	char					msg[PING_PACKET_DATA_SIZE];
 }							t_pkt4;
-
-typedef	struct				s_pkt6
-{
-	struct icmp6_hdr		icmp;
-	time_t					timestamp;
-	char					data[PING_PACKET_DATA_SIZE];
-}							t_pkt6;
 
 typedef struct				s_msg
 {
@@ -66,30 +62,48 @@ typedef struct				s_msg
 	struct icmp				*icmp4;
 }							t_msg;
 
+typedef	struct				s_loop
+{
+	struct	timeval			tv;
+	t_msg					msg;
+	t_pkt4					pckt;
+	struct	sockaddr_in		r_addr;
+	int						addr_len;
+	int						msg_count;
+	int						send_allowed;
+}							t_loop;
+
+typedef struct				s_ping_stat {
+	uint16_t				icmp_send;
+	uint16_t				icmp_rcv;
+	uint16_t				icmp_error;
+	struct timeval			tv_ping_start;
+	struct timeval			tv_ping_end;
+	double					rtt_square_sum;
+	double					rtt_sum;
+	double					rtt_min;
+	double					rtt_max;
+}							t_ping_stat;
+
 typedef	struct 				s_ping
 {
 	int						options[3];
 	char					*hostname;
-	pid_t					pid;
-	uid_t					uid;
-	struct	timeval			tv;
-	struct	timezone		tz;
+	struct	timeval			tv_start;
+	struct	timeval			tv_end;
 	struct	addrinfo		*addr_res;
-	int						ai_family;
-	struct	msghdr			*msg;
 	int						sockfd;
 	char					ip_addr[MAX_INET_ADDRSTRLEN];
 	struct	sockaddr_in		ip4;
 	char					*reversed_dns;
+	t_ping_stat				stat;
 }							t_ping;
 
 extern	t_ping				*g_ping;
 
-int							get_host_ip(t_ping  *data);
+int							get_host_ip();
 void						sigint_handler(int sig);
 void						loop(void);
-
-void						fill_pkt4(struct s_pkt4 *pkt, time_t timestamp);
-void						print_ping_header(void);
+void						fill_send_packet(t_loop *state);
 
 #endif

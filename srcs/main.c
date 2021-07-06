@@ -42,27 +42,10 @@ static int			parse_options(int argc, char **argv, t_ping *ping)
 	return (EXIT_FAILURE);
 }
 
-static void			init_socket(t_ping *data)
-{
-	data->sockfd = socket(data->ai_family, SOCK_STREAM, 0);
-	if (data->sockfd == -1)
-	{
-		dprintf(STDERR_FILENO, "ERROR: %s (sockfd = %d)\n", "socket", data->sockfd);
-		exit (EXIT_FAILURE);
-	}
-}
-
 static void			init_params(t_ping *data)
 {
 	g_ping = data;
-	data->pid = getpid();
-	data->uid = getuid();
-	if (gettimeofday(&data->tv, &data->tz) != 0)
-	{	
-		dprintf(STDERR_FILENO, "%s\n", "[gettimeofday]: One of [tv] or [tz] pointed outside the accessible address space.");
-		exit (EXIT_FAILURE);
-	}
-	if (get_host_ip(data) == EXIT_FAILURE)
+	if (get_host_ip() == EXIT_FAILURE)
 		exit (EXIT_FAILURE);
 }
 
@@ -76,8 +59,7 @@ int					main(int argc, char	**argv)
 		exit (EXIT_FAILURE);
 	}
 	init_params(&data);
-	init_socket(&data);
-	signal(SIGINT, &sigint_handler);
+	// signal(SIGINT, &sigint_handler);
 	loop();
 	exit (EXIT_SUCCESS);
 }
