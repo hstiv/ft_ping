@@ -36,29 +36,32 @@ void					loop(void)
 	loop_preprocessor(&state);
 	state.send_allowed = 1;
 	msg_send = 1;
-	while (state.send_allowed)
+	while (1)
 	{
+		fill_send_packet(&state);
+		printf("%s\n", state.pckt.msg);
 		if (state.send_allowed)
 		{
 			if (gettimeofday(&state.tv, NULL) != 0)
 			{
 				dprintf(STDERR_FILENO, "%s\n", "ERROR:[gettimeofday]: One of [tv] or [tz] pointed outside the accessible address space.");
-				exit (EXIT_FAILURE);
+				// exit (EXIT_FAILURE);
 			}
 		}
-		fill_send_packet(&state);
-		printf("%s\n", state.pckt.msg);
-		if (sendto(g_ping->sockfd, &state.pckt, sizeof(state.pckt), 0, (struct sockaddr*)&g_ping->ip4, sizeof(g_ping->ip4)) == -1)
-		{
-			dprintf(STDERR_FILENO, "sento error -1\n");
-			exit (EXIT_FAILURE);
-		}
-		state.addr_len = sizeof(state.r_addr);
-		if (recvfrom(g_ping->sockfd, &state.pckt, sizeof(state.pckt), 0, (struct sockaddr*)&state.r_addr, &state.addr_len) <= 0 && state.msg_count > 1) 
-        {
-			dprintf(STDERR_FILENO, "\nPacket receive failed!\n");
-			exit (EXIT_FAILURE);
-        }
-		printf("ggtwgtr\n");
+		printf("%ld\n", sizeof(state.pckt));
+		sendto(g_ping->sockfd, &state.pckt, sizeof(state.pckt), 0, NULL, 0);
+		// if (sendto(g_ping->sockfd, &state.pckt, sizeof(state.pckt), 0, (struct sockaddr*)&g_ping->ip4, sizeof(g_ping->ip4)) == -1)
+		// {
+		// 	dprintf(STDERR_FILENO, "sento error -1\n");
+		// 	// exit (EXIT_FAILURE);
+		// }
+		// state.addr_len = sizeof(state.r_addr);
+		// if (recvfrom(g_ping->sockfd, &state.pckt, sizeof(state.pckt), 0, (struct sockaddr*)&state.r_addr, &state.addr_len) <= 0 && state.msg_count > 1) 
+        // {
+		// 	dprintf(STDERR_FILENO, "\nPacket receive failed!\n");
+		// 	exit (EXIT_FAILURE);
+        // }
+		// printf("ggtwgtr\n");
+		state.send_allowed = 1;
 	}
 }
