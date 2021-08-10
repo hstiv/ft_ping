@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
     printf("\nReverse Lookup domain: %s", reverse_hostname);
   
     //socket()
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    sockfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
     if(sockfd<0)
     {
         printf("\nSocket file descriptor not received!!\n");
