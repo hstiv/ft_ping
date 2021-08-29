@@ -4,7 +4,20 @@ t_ping				*g_ping;
 
 const char			*g_valid_opt = "vh";
 
-static int			set_option(t_ping *ping, char c)
+void	ft_perror(char *s, int code)
+{
+	if (code == 0)
+		dprintf(STDERR_FILENO, "ft_pint: %s\n", s);
+	else
+		perror(s);
+	if (g_ping->reversed_dns)
+		free(g_ping->reversed_dns);
+	if (g_ping->sockfd != -1)
+		close(g_ping->sockfd);
+	exit(EXIT_FAILURE);
+}
+
+static int	set_option(t_ping *ping, char c)
 {
 	if (ft_strchr(g_valid_opt, c) == NULL)
 		return (EXIT_FAILURE);
@@ -15,7 +28,7 @@ static int			set_option(t_ping *ping, char c)
 	return (EXIT_SUCCESS);
 }
 
-static int			parse_options(int argc, char **argv, t_ping *ping)
+static int	parse_options(int argc, char **argv, t_ping *ping)
 {
 	int				i;
 	int				j;
@@ -42,7 +55,7 @@ static int			parse_options(int argc, char **argv, t_ping *ping)
 	return (EXIT_FAILURE);
 }
 
-static void			init_params(t_ping *data)
+static void	init_params(t_ping *data)
 {
 	g_ping = data;
 	ft_bzero(&data->stat, sizeof(data->stat));
@@ -51,7 +64,7 @@ static void			init_params(t_ping *data)
 		exit (EXIT_FAILURE);
 }
 
-int					main(int argc, char	**argv)
+int	main(int argc, char	**argv)
 {
 	t_ping			data;
 
