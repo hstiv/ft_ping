@@ -47,12 +47,9 @@ static int	parse_options(int argc, char **argv, t_ping *ping)
 					return (EXIT_FAILURE);
 		}
 		else
-		{
 			ping->hostname = ft_strdup(argv[i]);
-			return (EXIT_SUCCESS);
-		}
 	}
-	return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 static void	init_params(t_ping *data)
@@ -72,6 +69,11 @@ int	main(int argc, char	**argv)
 	{
 		dprintf(STDERR_FILENO, "%s\n", USAGE);
 		exit (EXIT_FAILURE);
+	}
+	if (data.options[OPT_H])
+	{
+		dprintf(STDERR_FILENO, "%s\n", USAGE);
+		exit (EXIT_SUCCESS);
 	}
 	init_params(&data);
 	signal(SIGINT, &signal_handler);
