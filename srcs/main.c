@@ -45,6 +45,8 @@ static int			parse_options(int argc, char **argv, t_ping *ping)
 static void			init_params(t_ping *data)
 {
 	g_ping = data;
+	ft_bzero(&data->stat, sizeof(data->stat));
+	g_ping->ttl = TTL;
 	if (get_host_ip() == EXIT_FAILURE)
 		exit (EXIT_FAILURE);
 }
@@ -59,7 +61,8 @@ int					main(int argc, char	**argv)
 		exit (EXIT_FAILURE);
 	}
 	init_params(&data);
-	// signal(SIGINT, &sigint_handler);
+	signal(SIGINT, &signal_handler);
+	signal(SIGALRM, &signal_handler_alrm);
 	loop();
 	exit (EXIT_SUCCESS);
 }

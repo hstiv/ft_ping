@@ -5,7 +5,9 @@
 		"signal.h": "c",
 		"netdb.h": "c",
 		"time.h": "c",
-		"inet.h": "c"
+		"inet.h": "c",
+		"ip_icmp.h": "c",
+		"typeinfo": "c"
 	},
 	"C_Cpp.errorSquiggles": "Disabled"
 }

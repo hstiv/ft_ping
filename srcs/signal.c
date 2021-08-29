@@ -1,10 +1,12 @@
 #include "ft_ping.h"
 
-// Handler for SIGINT, caused by
-// Ctrl-C at keyboard
-void			sigint_handler(int sig)
+void	signal_handler_alrm(__attribute__((unused))int sig)
 {
-    printf("Caught signal %d\n", sig);
-    // print_stat();
+	g_ping->wait = false;
+}
+
+void			signal_handler(__attribute__((unused))int sig)
+{
+    print_statistics();
     exit (EXIT_SUCCESS);
 }
