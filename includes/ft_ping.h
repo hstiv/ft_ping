@@ -50,7 +50,8 @@ Options: \n\
 
 typedef	struct				s_pkt4
 {
-	struct icmphdr			hdr;
+	// struct icmphdr			hdr;
+	struct icmp				icmp;
 	time_t					timestamp;
 	char					msg[PING_PACKET_DATA_SIZE];
 }							t_pkt4;

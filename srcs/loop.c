@@ -79,6 +79,7 @@ void					loop(void)
 			rcv_icmp_seq = rev_uint16(msg_recv.icmp4->icmp_seq);
 			if (rcv_icmp_seq == g_ping->stat.icmp_send || msg_recv.icmp4->icmp_type != ICMP_ECHOREPLY)
 			{
+				
 				state.send_allowed = inspect_and_print_ping(&msg_recv, &state.tv);
 				if (!state.send_allowed)
 					continue;

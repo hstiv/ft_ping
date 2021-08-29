@@ -34,22 +34,20 @@ void	read_ping(t_msg *msg_recv) {
 
 void	fill_send_packet(t_loop *state)
 {
-	int i;
+	time_t timestamp;
 
-	i = 0;
+	timestamp = g_ping->stat.icmp_send;
 	state->msg_count++;
 	ft_bzero((void *)&state->pckt, sizeof(t_pkt4));
-	state->pckt.hdr.type = ICMP_ECHO;
-	state->pckt.hdr.un.echo.id = getpid();
+	state->pckt.icmp.icmp_type = ICMP_ECHO;
+	state->pckt.icmp.icmp_code = ICMP_ECHO_CODE;
+	state->pckt.icmp.icmp_id = rev_uint16((uint16_t)getpid());
 	g_ping->stat.icmp_send++;
-	while (i < (int)PING_PACKET_DATA_SIZE - 1)
-	{
-		state->pckt.msg[i] = i + '0';
-		i++;
-	}
-	state->pckt.msg[i] = 0;
-	state->pckt.hdr.un.echo.sequence = state->msg_count;
-	state->pckt.hdr.checksum = checksum(&state->pckt, sizeof(state->pckt));
+	state->pckt.icmp.icmp_seq = rev_uint16(g_ping->stat.icmp_send);
+	ft_memset(state->pckt.msg, PING_PACKET_DATA_SIZE, PING_PACKET_DATA_SIZE - 1);
+	state->pckt.timestamp = rev_uint64(g_ping->tv_start.tv_sec);
+	ft_memcpy(&state->pckt.icmp.icmp_dun, &timestamp, sizeof(timestamp));
+	state->pckt.icmp.icmp_cksum = checksum(&state->pckt, sizeof(state->pckt));
 }
 
 void	fill_recv_msg(t_msg *msg_recv)
