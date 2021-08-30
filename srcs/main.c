@@ -1,9 +1,5 @@
 #include "ft_ping.h"
 
-t_ping				*g_ping;
-
-const char			*g_valid_opt = "vh";
-
 void	ft_perror(char *s, int code)
 {
 	if (code == 0)
@@ -19,7 +15,7 @@ void	ft_perror(char *s, int code)
 
 static int	set_option(t_ping *ping, char c)
 {
-	if (ft_strchr(g_valid_opt, c) == NULL)
+	if (ft_strchr(VALID_OPTIONS, c) == NULL)
 		return (EXIT_FAILURE);
 	if (c == 'v')
 		ping->options[OPT_V] = 1;

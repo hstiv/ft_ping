@@ -29,6 +29,7 @@ Options: \n\t-v\t-\tverbose\n\t-h\t-\thelp"
 # define RECV_TIMEOUT 1
 # define TTL 64
 # define INTERVAL 1
+# define VALID_OPTIONS "vh"
 
 # define GETTIMEOFDAY_ERR "ERROR:[gettimeofday]: One of \
 [tv] or [tz] pointed outside the accessible address space.\n"
@@ -98,7 +99,7 @@ typedef struct s_ping
 	bool					wait;
 }							t_ping;
 
-extern t_ping				*g_ping;
+t_ping						*g_ping;
 
 void						ft_perror(char *s, int code);
 int							get_host_ip(void);
